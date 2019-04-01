@@ -345,19 +345,34 @@ export const setupInstallOptions = (selected, options) => {
 export const parseNpmAudit = data => {
   try {
     const dataToJson = JSON.parse(data);
+    const fs = require('fs');
+
+    fs.writeFileSync('audit.json', data, {
+      encoding: 'utf-8'
+    });
+
+    console.log(dataToJson);
+    const { error } = dataToJson;
+
+    if (error) {
+      const { code, summary } = error;
+
+      return {
+        error: true,
+        message: `${code}: ${summary}`
+      };
+    }
+
     const {
       metadata: { vulnerabilities }
     } = dataToJson;
 
-    const vulnerabilitiesKeys = Object.keys(vulnerabilities);
-
-    return (
-      vulnerabilitiesKeys &&
-      vulnerabilitiesKeys.map(key => ({
-        name: key,
-        value: vulnerabilities[key]
-      }))
-    );
+    return [
+      {
+        name: 'name',
+        value: 0
+      }
+    ];
   } catch (error) {}
 };
 
@@ -365,8 +380,24 @@ export const parseNpmPrune = data => {
   try {
     const dataToJson = JSON.parse(data);
 
+    const fs = require('fs');
+
+    fs.writeFileSync('prune.json', data, {
+      encoding: 'utf-8'
+    });
+
     return dataToJson;
   } catch (error) {}
 };
 
-export const parseNpmDoctor = data => {};
+export const parseNpmDoctor = data => {
+  try {
+    const fs = require('fs');
+
+    fs.writeFileSync('doctor.json', data, {
+      encoding: 'utf-8'
+    });
+
+    return data;
+  } catch (error) {}
+};

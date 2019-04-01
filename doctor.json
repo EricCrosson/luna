@@ -1,0 +1,10 @@
+Check                               Value                        Recommendation
+npm ping                            OK
+npm -v                              v6.9.0
+node -v                             v10.15.1                     Use node v10.15.3
+npm config get registry             https://registry.npmjs.org/
+which git                           /usr/local/bin/git
+Perms check on cached files         ok
+Perms check on global node_modules  ok
+Perms check on local node_modules   ok
+Verify cache contents               verified 3648 tarballs

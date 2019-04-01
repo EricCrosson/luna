@@ -19,11 +19,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-
+import ReportPage from 'components/common/ReportPage';
 import { Notifications } from 'components/pages/notifications';
 import { setSnackbar, toggleLoader } from 'models/ui/actions';
 import {
@@ -93,19 +89,31 @@ const AppLayout = ({ classes }) => {
         doctor: () => parseNpmDoctor(cliResult)
       })(null)(toolName);
 
-      if (cliResult) {
-        setDialog({
-          open: true,
-          content: content || 'No results'
-        });
-      }
-
       dispatch(
         toggleLoader({
           loading: false,
           message: null
         })
       );
+
+      const { error, message } = content;
+
+      if (error) {
+        dispatch(
+          setSnackbar({
+            open: true,
+            type: 'error',
+            message
+          })
+        );
+      } else {
+        if (content) {
+          setDialog({
+            open: true,
+            content
+          });
+        }
+      }
     });
 
     return () => ipcRenderer.removeAllListeners('tool-close');
@@ -164,20 +172,7 @@ const AppLayout = ({ classes }) => {
           <Dialog open={dialog.open} aria-labelledby="results-tools">
             <DialogTitle>Results</DialogTitle>
             <DialogContent>
-              <List dense>
-                {dialog.content.map(item => (
-                  <ListItem key={item.name}>
-                    <ListItemText
-                      primary={
-                        <Typography veriant="h6">{item.name}</Typography>
-                      }
-                    />
-                    <ListItemSecondaryAction>
-                      <Typography veriant="h6">{item.value}</Typography>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                ))}
-              </List>
+              <ReportPage content={dialog.content} />
             </DialogContent>
             <DialogActions>
               <Button
