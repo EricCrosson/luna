@@ -61,7 +61,6 @@ const notificationsEpic = pipe(
 const npmCacheEpic = pipe(
   ofType(runCacheOperation.type),
   map(({ payload }) => {
-    console.log(payload);
     ipcRenderer.send('ipc-event', payload);
 
     return resumeRequest();

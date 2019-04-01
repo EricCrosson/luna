@@ -63,7 +63,11 @@ const mapState = ({
 
 const AppLayout = ({ classes }) => {
   const [drawerOpen, toggleDrawer] = useState(false);
-  const [dialog, setDialog] = useState({ open: false, content: null });
+  const [dialog, setDialog] = useState({
+    open: false,
+    content: null,
+    title: null
+  });
 
   const {
     activePage,
@@ -96,7 +100,7 @@ const AppLayout = ({ classes }) => {
         })
       );
 
-      const { error, message } = content;
+      const { error, message } = content || {};
 
       if (error) {
         dispatch(
@@ -110,6 +114,7 @@ const AppLayout = ({ classes }) => {
         if (content) {
           setDialog({
             open: true,
+            title: toolName,
             content
           });
         }
@@ -170,10 +175,9 @@ const AppLayout = ({ classes }) => {
         )}
         {dialog && (
           <Dialog fullWidth open={dialog.open} aria-labelledby="report-page">
-            <DialogTitle>Results</DialogTitle>
-            <Divider light />
+            <DialogTitle>{`npm ${dialog.title} report`}</DialogTitle>
             <DialogContent>
-              <ReportPage content={dialog.content} />
+              <ReportPage data={dialog.content} toolName={dialog.title} />
             </DialogContent>
             <DialogActions>
               <Button

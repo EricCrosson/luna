@@ -9,7 +9,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import ArrowRightIcon from '@material-ui/icons/ArrowRightAlt';
+import VerifyIcon from '@material-ui/icons/Check';
 
 import styles from './styles/settings';
 
@@ -35,7 +35,7 @@ const Settings = ({ classes, items }) => (
                 aria-label={`${item.primaryText}-action`}
                 onClick={item.action}
               >
-                <ArrowRightIcon />
+                <VerifyIcon />
               </IconButton>
             </ListItemSecondaryAction>
           )}

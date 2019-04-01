@@ -351,7 +351,6 @@ export const parseNpmAudit = data => {
       encoding: 'utf-8'
     });
 
-    console.log(dataToJson);
     const { error } = dataToJson;
 
     if (error) {
@@ -363,17 +362,35 @@ export const parseNpmAudit = data => {
       };
     }
 
-    const {
-      metadata: { vulnerabilities }
-    } = dataToJson;
+    const { metadata } = dataToJson;
+    const dataKeys = Object.keys(metadata);
 
-    return [
-      {
-        name: 'name',
-        value: 0
+    const result = dataKeys.map(dataKey => {
+      const valueObject = typeof metadata[dataKey] === 'object';
+
+      if (valueObject) {
+        const valueKeys = Object.keys(metadata[dataKey]);
+        const valueResult = valueKeys.map(valueKey => ({
+          name: valueKey,
+          value: metadata[dataKey][valueKey]
+        }));
+
+        return {
+          name: dataKey,
+          value: valueResult
+        };
+      } else {
+        return {
+          name: dataKey,
+          value: metadata[dataKey]
+        };
       }
-    ];
-  } catch (error) {}
+    });
+
+    return result;
+  } catch (error) {
+    Promise.reject(error);
+  }
 };
 
 export const parseNpmPrune = data => {
@@ -381,14 +398,25 @@ export const parseNpmPrune = data => {
     const dataToJson = JSON.parse(data);
 
     const fs = require('fs');
-
     fs.writeFileSync('prune.json', data, {
       encoding: 'utf-8'
     });
 
-    console.log(dataToJson);
-    return dataToJson;
-  } catch (error) {}
+    const dataKeys = Object.keys(dataToJson);
+
+    const result = dataKeys.map(dataKey => {
+      const valueArray = Array.isArray(dataToJson[dataKey]);
+
+      return {
+        name: dataKey,
+        value: valueArray ? dataToJson[dataKey].length : null
+      };
+    });
+
+    return result;
+  } catch (error) {
+    Promise.reject(error);
+  }
 };
 
 export const parseNpmDoctor = data => {
@@ -400,5 +428,7 @@ export const parseNpmDoctor = data => {
     });
 
     return data;
-  } catch (error) {}
+  } catch (error) {
+    Promise.reject(error);
+  }
 };
