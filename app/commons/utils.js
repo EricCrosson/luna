@@ -386,6 +386,7 @@ export const parseNpmPrune = data => {
       encoding: 'utf-8'
     });
 
+    console.log(dataToJson);
     return dataToJson;
   } catch (error) {}
 };

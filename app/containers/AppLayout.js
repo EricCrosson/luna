@@ -12,7 +12,7 @@ import Header from 'components/layout/AppHeader';
 import { Packages } from 'components/pages/packages';
 import SnackbarContent from 'components/common/SnackbarContent';
 
-import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
@@ -168,9 +168,10 @@ const AppLayout = ({ classes }) => {
             />
           </Snackbar>
         )}
-        {dialog && dialog.open && (
-          <Dialog open={dialog.open} aria-labelledby="results-tools">
+        {dialog && (
+          <Dialog fullWidth open={dialog.open} aria-labelledby="report-page">
             <DialogTitle>Results</DialogTitle>
+            <Divider light />
             <DialogContent>
               <ReportPage content={dialog.content} />
             </DialogContent>
